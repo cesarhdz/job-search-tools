@@ -115,19 +115,6 @@ V0 is successful when the following can be demonstrated locally:
 
 We evaluate AI integration by successful behavior/tool use rather than exact generated wording.
 
-## Progress
-
-Keep this checklist at product-milestone level. Detailed implementation tasks belong in the PR that performs the work.
-
-- [x] Define product direction and project foundation
-- [ ] Run a usable workspace locally
-- [ ] Build and enrich job-search memory progressively
-- [ ] Save and track opportunities
-- [ ] Use the same workspace state from AI and web UI
-- [ ] Export and restore the workspace
-
-Milestones may be completed by one or more PRs. Git and pull-request history provide implementation traceability, so this checklist should stay free of PR references and other bookkeeping.
-
 ## Non-goals
 
 - job crawler or search engine
