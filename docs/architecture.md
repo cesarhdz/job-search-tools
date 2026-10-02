@@ -56,12 +56,43 @@ docs/
   architecture.md
   testing.md
   prd/
+  spec/
   adr/
 ```
 
 Each module owns the behavior and contracts for its capability. A module may contain domain/application code and the adapters it needs, but framework-specific composition stays in the runtime apps.
 
 We should avoid global `domain` or `contracts` packages becoming dumping grounds. Shared code should be extracted only when two real modules need the same abstraction.
+
+## Product and design evolution
+
+Design is intentionally incremental. We should document the decision that is needed for the next useful slice, not fully specify later phases before we have learned from the current one.
+
+The documentation layers have different jobs:
+
+- **PRD** — defines the problem, intended outcome, scope, product constraints, and product-level acceptance criteria.
+- **Spec** — defines the behavior and design of a concrete slice that is ready to be implemented.
+- **ADR** — preserves the rationale for a durable technical/architectural decision.
+- **Architecture** — describes the current system after those decisions have been incorporated.
+
+A typical larger change can evolve as:
+
+```text
+PRD
+  -> merge
+  -> learn / choose next slice
+  -> spec
+  -> merge
+  -> implementation
+  -> learn
+  -> next spec
+```
+
+This is not a mandatory one-document-per-PR ceremony. A small, well-understood change may include its PRD, spec, and implementation in the same pull request when that remains the smallest coherent change.
+
+The important constraint is that pull requests remain atomic and independently useful. A merged PR should not depend on a hypothetical future PR to make its contents coherent.
+
+Specs are created just in time. We should prefer extending the system from observed use over writing speculative specs for later phases.
 
 ## Runtime boundaries
 
@@ -92,39 +123,21 @@ NestJS is a transport/composition choice, not the domain architecture.
 
 MCP tools are task-oriented adapters over module application behavior. They must not implement a second set of product rules.
 
-Initial tools:
-
-- `get_search_context`
-- `update_search_context`
-- `save_opportunity`
-- `get_opportunity`
-- `update_opportunity_status`
-- `add_opportunity_note`
-
 The same underlying commands are available to the web application.
+
+Exact tool contracts belong in the spec for the slice that introduces them rather than in the high-level product architecture.
 
 ## Local-first runtime
 
-V0 must run after installation with:
-
-```bash
-pnpm dev
-```
-
-That command starts:
-
-- Next.js web app
-- NestJS server
-- MCP endpoint
-- local SQLite storage
-
-No AWS, Docker, PostgreSQL server, or hosted authentication is required for the first end-to-end slice.
+V0 must be easy to run locally, with no cloud dependency in the development loop.
 
 The target feedback loop is:
 
 ```text
-edit -> pnpm dev -> AI call -> inspect UI/state
+edit -> local run -> AI call -> inspect UI/state
 ```
+
+The concrete local runtime and commands are specified when that slice is implemented.
 
 ## Storage
 
@@ -167,14 +180,9 @@ There is no separate "professional memory" and "search memory" product. They are
 
 ## Opportunity lifecycle
 
-V0 deliberately starts small:
+The first lifecycle should remain intentionally small and evolve from actual use rather than being copied from a full ATS.
 
-- `review`
-- `saved`
-- `applied`
-- `closed`
-
-More stages are introduced from actual use rather than copied from a full ATS.
+Exact states and transitions belong in the relevant opportunity/tracking spec.
 
 When an opportunity is saved, the workspace may keep a snapshot/normalized copy of the job description so the user's history does not depend on the original posting remaining online.
 
@@ -188,7 +196,7 @@ All persistence implementations must be able to map to and from that format. Thi
 
 The project does not require an LLM backend.
 
-An AI host receives only the context needed for the current task through MCP and can update state through explicit tools.
+An AI host receives task-relevant context through MCP and can update state through explicit tools.
 
 We test AI integration primarily as behavior/tool use rather than exact generated wording. See `docs/testing.md`.
 
