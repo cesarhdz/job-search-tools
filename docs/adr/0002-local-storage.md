@@ -1,6 +1,12 @@
-# ADR 0002: SQLite for local development, storage behind ports
+---
+id: ADR-0002
+title: SQLite for local development, storage behind ports
+type: adr
+status: accepted
+scope: V0
+---
 
-Status: Accepted for V0
+# ADR 0002: SQLite for local development, storage behind ports
 
 ## Context
 
