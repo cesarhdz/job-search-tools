@@ -20,11 +20,11 @@ modules/
   portability/         # import/export
 
 docs/
+  architecture.md
+  testing.md
   prd/
   adr/
-  testing.md
 
-ARCHITECTURE.md
 CONTRIBUTING.md
 ```
 
@@ -44,7 +44,7 @@ After dependencies are installed, the target developer experience is a single `p
 See:
 
 - [PRD 0001: First end-to-end workspace](docs/prd/0001-first-end-to-end-workspace.md)
-- [Architecture](ARCHITECTURE.md)
+- [Architecture](docs/architecture.md)
 - [Testing](docs/testing.md)
 - [Contributing](CONTRIBUTING.md)
 
