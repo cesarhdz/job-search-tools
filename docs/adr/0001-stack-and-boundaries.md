@@ -6,10 +6,11 @@ Status: Accepted for bootstrap
 
 Use a pnpm + TypeScript monorepo for the public product.
 
-- Next.js for the workspace web application.
-- NestJS for API and MCP transport.
-- Zod for shared runtime contracts.
-- Keep domain packages framework-independent.
+- Next.js for the workspace web runtime.
+- NestJS for the server/API/MCP runtime.
+- Organize product behavior primarily by module/capability, not frontend/backend layer.
+- Keep `apps/web` and `apps/server` as thin composition roots.
+- Let each module own its domain/application behavior and contracts.
 - Keep concrete persistence behind storage ports.
 - Use SQLite as the first local adapter; PostgreSQL is added when hosted deployment requires it.
 - Do not add Turborepo until repository scale justifies it.
@@ -18,12 +19,30 @@ Use a pnpm + TypeScript monorepo for the public product.
 
 ## Rationale
 
-Memory, tracking, triage, MCP and portability evolve around one shared domain model and should version together.
+Memory, opportunities, tracking, MCP and portability evolve as product capabilities and should be understandable independently of the runtime surface that invokes them.
 
-The local open-source product must be easy to run without infrastructure. The website has a different editorial/contribution lifecycle, while cloud operations have a different security and licensing boundary.
+A frontend/backend-first layout tends to split one capability across unrelated trees and encourages duplicate rules. The web app and MCP server should instead compose the same module behavior.
+
+The local open-source product must also be easy to run without infrastructure. The website has a different editorial/contribution lifecycle, while cloud operations have a different security and licensing boundary.
 
 ## Consequences
 
-Public packages can later be published/consumed by the hosted service. The cloud repository must not duplicate domain rules that belong here.
+The initial shape is:
 
-Storage, auth, and deployment are replaceable boundaries rather than assumptions embedded in the domain.
+```text
+apps/
+  web/
+  server/
+
+modules/
+  memory/
+  opportunities/
+  tracking/
+  portability/
+```
+
+Module internals may contain domain, application, contracts, and adapters as needed. We should not introduce a global `domain` or `contracts` package until there is a real cross-module abstraction.
+
+The cloud repository must consume/run this product rather than duplicate its behavior.
+
+Storage, auth, and deployment remain replaceable boundaries rather than assumptions embedded in product modules.
