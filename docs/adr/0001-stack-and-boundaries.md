@@ -1,6 +1,12 @@
-# ADR 0001: Stack and repository boundaries
+---
+id: ADR-0001
+title: Stack and repository boundaries
+type: adr
+status: accepted
+scope: bootstrap
+---
 
-Status: Accepted for bootstrap
+# ADR 0001: Stack and repository boundaries
 
 ## Decision
 
