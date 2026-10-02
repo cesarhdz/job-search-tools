@@ -1,9 +1,3 @@
----
-title: Roadmap
-type: roadmap
-status: current
----
-
 # Roadmap
 
 ## Now
