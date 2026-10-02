@@ -24,10 +24,13 @@ apps/api (NestJS)
   |
   v
 storage adapter
+  |
+  +--> SQLite (V0/local)
+  +--> PostgreSQL (future hosted)
 
 apps/web (Next.js)
   |
-  +--> same public API/contracts
+  +--> same application/domain behavior
   +--> triage, tracking, notes, memory editing
 ```
 
@@ -43,7 +46,7 @@ apps/
 packages/
   domain/         framework-free entities, value objects, commands
   contracts/      Zod schemas shared across API, MCP, UI, import/export
-  memory/         profile, experience, skills/evidence, preferences
+  memory/         structured job-search context
   workspace/      opportunities, applications, notes, interactions
   mcp/            MCP tools/resources and mapping to application commands
   portability/    versioned import/export format
@@ -59,25 +62,41 @@ One workspace and one dependency graph for all public tools. TypeScript is stric
 
 ### Next.js
 
-Used only for the interactive workspace: onboarding, memory inspection/editing, opportunity triage, tracking, notes, and exports.
+Used for the interactive workspace: onboarding, memory inspection/editing, opportunity triage, tracking, notes, and exports.
 
 ### NestJS
 
-Used for the API boundary and remote MCP server. Domain code should not depend on Nest decorators or modules.
+Used for the API boundary and HTTP MCP transport. Domain code must not depend on Nest decorators or modules.
 
 ### Zod
 
 Canonical runtime schemas for boundaries: MCP inputs/outputs, HTTP DTOs, persisted portable formats, and validation.
 
-### PostgreSQL
+### SQLite first
 
-Default relational adapter for hosted/self-hosted server deployments. Product code depends on storage interfaces, not PostgreSQL directly, so a different local or encrypted-vault adapter can be introduced later.
+SQLite is the default V0/local storage adapter so the full product can run with `pnpm dev` and no external infrastructure.
+
+Product code depends on storage interfaces rather than SQLite directly. PostgreSQL is a future hosted adapter, not a local-development requirement.
+
+## Local development
+
+The target loop is:
+
+```text
+clone
+  -> pnpm install
+  -> pnpm dev
+  -> connect MCP client
+  -> exercise AI <-> state <-> UI
+```
+
+No AWS, Docker, hosted database, or remote authentication is required for the first end-to-end slice.
 
 ## Data model direction
 
-V1 starts with one workspace but every domain object belongs to a `workspaceId` so multiple searches can be supported later.
+V0 starts with one workspace but every domain object belongs to a `workspaceId` so multiple searches can be supported later.
 
-Initial aggregates:
+Initial concepts:
 
 - Workspace
 - Memory
@@ -87,13 +106,11 @@ Initial aggregates:
   - constraints
 - Opportunity
   - source URL
-  - immutable/snapshotted job content when saved
-  - triage state
-- Application
-  - status
-  - dates
+  - snapshotted job content when saved
+  - triage/tracking state
   - notes
-  - interactions / feedback
+- Application/interaction details
+  - introduced only as real tracking needs require them
 - Document reference
   - future resumes and supporting files
 
@@ -107,32 +124,28 @@ Examples:
 
 - `updateMemory`
 - `saveOpportunity`
-- `dismissOpportunity`
-- `changeApplicationStatus`
+- `updateOpportunityStatus`
 - `addNote`
-- `recordInteraction`
 
-An append-only activity/event log may record mutations for audit, synchronization and undo, without requiring full event sourcing.
+An append-only activity/event log may later record mutations for audit, synchronization, and undo without requiring full event sourcing.
 
 ## Read path
 
 MCP should expose task-oriented views instead of dumping the complete workspace:
 
 - `get_search_context`
-- `get_relevant_evidence`
 - `get_opportunity`
-- `get_pipeline_summary`
-- `get_application_context`
+- later, focused evidence/pipeline/application views as required
 
-This keeps AI context focused and makes the memory portable between AI hosts.
+This keeps AI context focused and makes memory useful across AI hosts.
 
 ## Portability
 
 The database is not the portability contract.
 
-Export/import is a versioned logical workspace format containing structured state plus referenced files/snapshots. Hosted PostgreSQL, self-hosted PostgreSQL, or future storage adapters must all map to the same format.
+Export/import is a versioned logical workspace format containing structured state plus referenced files/snapshots. SQLite, hosted PostgreSQL, or future adapters map to the same logical format.
 
-## Explicit non-goals for V1
+## Explicit non-goals for V0
 
 - own LLM inference
 - crawler/search engine
@@ -141,4 +154,5 @@ Export/import is a versioned logical workspace format containing structured stat
 - vector database as a source of truth
 - native resume generator
 - native interview coach
+- cloud auth/billing
 - complex multi-workspace UI
