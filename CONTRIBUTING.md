@@ -6,9 +6,24 @@ Job Search Tools is intended to be easy to run, understand, and modify locally.
 
 For product changes, start with the relevant PRD under `docs/prd/`.
 
-`ARCHITECTURE.md` describes the current system and should stay evergreen. When a change makes a durable architectural decision worth preserving, add an ADR under `docs/adr/` and update `ARCHITECTURE.md` to reflect the resulting system.
+`docs/architecture.md` describes the current system and should stay evergreen. When a change makes a durable architectural decision worth preserving, add an ADR under `docs/adr/` and update the architecture document to reflect the resulting system.
 
 Small fixes do not need a new PRD or ADR.
+
+## Documentation metadata
+
+Structured documentation uses YAML frontmatter so it can be indexed or rendered later without relying on filename/title parsing.
+
+Use frontmatter for:
+
+- PRDs
+- ADRs
+- architecture/testing guides
+- other docs that become part of the structured documentation set
+
+README and contributor-facing repository files do not need frontmatter.
+
+Keep metadata small: identifiers, title, type, status, and an optional scope when useful.
 
 ## Pull requests
 
