@@ -1,0 +1,12 @@
+{
+  "name": "job-search-tools",
+  "private": true,
+  "packageManager": "pnpm@12.8.0",
+  "scripts": {
+    "build": "pnpm -r --if-present build",
+    "dev": "pnpm -r --parallel --if-present dev",
+    "lint": "pnpm -r --if-present lint",
+    "test": "pnpm -r --if-present test",
+    "typecheck": "pnpm -r --if-present typecheck"
+  }
+}

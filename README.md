@@ -6,50 +6,59 @@ This project provides the durable layer around AI: structured memory, opportunit
 
 ## Repository
 
-This is a pnpm + TypeScript monorepo.
-
-Planned applications and packages:
+This is a pnpm + TypeScript monorepo organized primarily by product module.
 
 ```text
 apps/
-  web/            # Next.js workspace UI
-  api/            # NestJS API + MCP server
+  web/                 # Next.js runtime/UI shell
+  server/              # NestJS API + MCP runtime shell
 
-packages/
-  domain/         # pure domain model
-  contracts/      # shared Zod schemas and tool contracts
-  memory/         # job-search memory
-  workspace/      # opportunities, applications, notes, feedback
-  mcp/            # AI-host integration
-  portability/    # import/export
-  storage/        # persistence interfaces/adapters
-  resume/         # future, only if native tooling becomes useful
+modules/
+  memory/              # search context, experience, skills/evidence
+  opportunities/       # saved jobs, snapshots, triage
+  tracking/            # status, notes, interactions
+  portability/         # import/export
 
 docs/
-  architecture/
-  product/
+  roadmap.md
+  architecture.md
+  testing.md
+  prd/
+  spec/
   adr/
+
+CONTRIBUTING.md
 ```
 
-## V1
+The runtime apps should stay thin. Product behavior and contracts belong to the module that owns the capability.
 
-- One job-search workspace.
-- Onboarding into structured memory.
-- MCP read/write tools for that memory.
-- Opportunities with job snapshots.
-- Triage: review, save, dismiss, applied.
-- Basic tracking, notes, and feedback.
-- Export/import.
+## First milestone
+
+The first milestone is deliberately local-first:
+
+```text
+AI -> memory/state -> web UI
+web UI -> memory/state -> AI
+```
+
+See:
+
+- [Roadmap](docs/roadmap.md)
+- [PRD 0001: First end-to-end workspace](docs/prd/0001-first-end-to-end-workspace.md)
+- [Architecture](docs/architecture.md)
+- [Testing](docs/testing.md)
+- [Contributing](CONTRIBUTING.md)
 
 ## Principles
 
 - AI-host independent.
 - Memory and state are portable.
 - Build software only where conversation is a poor interface.
-- Keep the domain model separate from storage and framework code.
-- The hosted platform is not required to use the open-source tools.
+- Organize product behavior by module rather than frontend/backend layer.
+- Keep framework/runtime code out of module business rules.
+- Local development requires no cloud infrastructure.
 - Start with one workspace; do not prevent multiple workspaces later.
 
 ## Status
 
-Architecture bootstrap. No production release yet.
+Architecture and product bootstrap. No production release yet.
