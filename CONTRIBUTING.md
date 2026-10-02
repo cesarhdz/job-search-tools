@@ -33,8 +33,9 @@ Rules:
 
 - keep milestones outcome-oriented, not implementation-task-oriented
 - detailed subtasks live only in the PR that implements them
-- link a PR or spec from the milestone when it exists
 - one milestone may be completed by multiple PRs
+- do not annotate milestones with PR numbers, URLs, issue IDs, or implementation history
+- use Git and pull-request history for traceability
 - do not create specs, issues, or placeholder files merely to represent future work
 - avoid duplicating the same task list in PRDs, specs, issues, and PR descriptions
 
@@ -43,7 +44,7 @@ Example:
 ```markdown
 ## Progress
 
-- [x] Define product direction — #1
+- [x] Define product direction
 - [ ] Run a usable workspace locally
 - [ ] Save and track opportunities
 - [ ] Use the same state from AI and UI
