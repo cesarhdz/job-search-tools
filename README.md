@@ -8,8 +8,6 @@ This project provides the durable layer around AI: structured memory, opportunit
 
 This is a pnpm + TypeScript monorepo.
 
-Planned applications and packages:
-
 ```text
 apps/
   web/            # Next.js workspace UI
@@ -19,27 +17,36 @@ packages/
   domain/         # pure domain model
   contracts/      # shared Zod schemas and tool contracts
   memory/         # job-search memory
-  workspace/      # opportunities, applications, notes, feedback
+  workspace/      # opportunities, tracking, notes, feedback
   mcp/            # AI-host integration
   portability/    # import/export
   storage/        # persistence interfaces/adapters
   resume/         # future, only if native tooling becomes useful
 
 docs/
-  architecture/
   product/
+  architecture/
   adr/
 ```
 
-## V1
+## First milestone
 
-- One job-search workspace.
-- Onboarding into structured memory.
-- MCP read/write tools for that memory.
-- Opportunities with job snapshots.
-- Triage: review, save, dismiss, applied.
-- Basic tracking, notes, and feedback.
-- Export/import.
+The first milestone is deliberately local-first:
+
+```text
+AI -> memory/state -> web UI
+web UI -> memory/state -> AI
+```
+
+After dependencies are installed, the target developer experience is a single `pnpm dev` command that starts the web app, API/MCP endpoint, and local SQLite workspace.
+
+See:
+
+- [PRD 0001: First end-to-end workspace](docs/product/prds/0001-first-end-to-end-workspace.md)
+- [Implementation plan](docs/product/tasks/0001-first-end-to-end-workspace.md)
+- [Architecture overview](docs/architecture/overview.md)
+- [Testing strategy](docs/architecture/testing.md)
+- [Contributing](CONTRIBUTING.md)
 
 ## Principles
 
@@ -47,9 +54,10 @@ docs/
 - Memory and state are portable.
 - Build software only where conversation is a poor interface.
 - Keep the domain model separate from storage and framework code.
+- Local development requires no cloud infrastructure.
 - The hosted platform is not required to use the open-source tools.
 - Start with one workspace; do not prevent multiple workspaces later.
 
 ## Status
 
-Architecture bootstrap. No production release yet.
+Architecture and product bootstrap. No production release yet.
