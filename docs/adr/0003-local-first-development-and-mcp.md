@@ -1,6 +1,12 @@
-# ADR 0003: Local-first development and transport-agnostic MCP tools
+---
+id: ADR-0003
+title: Local-first development and transport-agnostic MCP tools
+type: adr
+status: accepted
+scope: V0
+---
 
-Status: Accepted for V0
+# ADR 0003: Local-first development and transport-agnostic MCP tools
 
 ## Context
 
