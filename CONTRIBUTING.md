@@ -2,13 +2,48 @@
 
 Job Search Tools is intended to be easy to run, understand, and modify locally.
 
-## Before contributing
+## Change design
 
-For product changes, start with the relevant PRD under `docs/prd/`.
+Use the smallest amount of design documentation that makes the change clear and reviewable.
 
-`docs/architecture.md` describes the current system and should stay evergreen. When a change makes a durable architectural decision worth preserving, add an ADR under `docs/adr/` and update the architecture document to reflect the resulting system.
+- **PRD** (`docs/prd/`) — why/what: problem, outcome, scope, constraints, product acceptance criteria.
+- **Spec** (`docs/spec/`) — how a concrete product slice should behave: contracts, flows, data, edge cases, acceptance tests.
+- **ADR** (`docs/adr/`) — why a durable technical/architectural decision was made.
+- **Architecture** (`docs/architecture.md`) — evergreen description of the current system.
 
-Small fixes do not need a new PRD or ADR.
+Specs are written just in time. Do not fully specify later phases before the current slice has produced useful feedback.
+
+A larger change may naturally move through separate PRs:
+
+```text
+PRD -> spec -> implementation
+```
+
+That separation is not mandatory. A small, well-understood change may include PRD + spec + implementation in one PR when the combined change is still coherent and easy to review.
+
+Small fixes do not need a PRD or spec. Add an ADR only when the reasoning is likely to matter later.
+
+## Atomic and incremental pull requests
+
+Every PR should be a coherent increment that can be merged on its own.
+
+Prefer changes that are:
+
+- **atomic** — one coherent purpose
+- **additive** — extend the repository without requiring unrelated future work
+- **incremental** — solve the next useful slice instead of designing the whole roadmap
+- **independently mergeable** — the PR makes sense even if no planned future PR is ever opened
+
+A documentation-only PR is valid when the document itself is a useful decision or proposal. For example, a proposed PRD can merge before its specs or implementation exist.
+
+Avoid:
+
+- speculative scaffolding for later phases
+- implementation that depends on an unmerged future design
+- large refactors mixed with product behavior
+- maintaining duplicate task plans across documents
+
+Detailed implementation subtasks belong in the implementation PR. High-level future phases should not be treated as committed design.
 
 ## Documentation metadata
 
@@ -17,24 +52,37 @@ Structured documentation uses YAML frontmatter so it can be indexed or rendered 
 Use frontmatter for:
 
 - PRDs
+- specs
 - ADRs
 - architecture/testing guides
 - other docs that become part of the structured documentation set
 
 README and contributor-facing repository files do not need frontmatter.
 
-Keep metadata small: identifiers, title, type, status, and an optional scope when useful.
+Keep metadata small. Typical fields:
+
+```yaml
+---
+id: SPEC-0001
+title: Example
+type: spec
+status: proposed
+prd: PRD-0001
+---
+```
+
+Not every document needs every field.
+
+When a historical spec/ADR is replaced, prefer marking it superseded and linking its replacement instead of rewriting the historical decision as if it had always been different.
 
 ## Pull requests
 
 Keep pull requests focused and reviewable.
 
 - one coherent change per PR
-- avoid mixing large refactors with product features
-- link the relevant PRD, issue, or ADR
-- keep detailed implementation subtasks in the implementation PR rather than maintaining a second project plan
-- include exact local test steps
-- update contracts/docs when behavior changes
+- link the relevant PRD, spec, issue, or ADR when one exists
+- include exact local test steps for implementation changes
+- update current architecture/docs when behavior changes
 - never commit secrets or real user/job-search data
 
 Changes to MCP tools should describe:
@@ -72,7 +120,7 @@ Use simple Conventional Commit prefixes:
 - SQLite is the default local adapter, not the domain model
 - AI inference is not a required backend dependency
 - user workspace portability must not depend on copying a database file
-- do not add infrastructure that the current vertical slice does not require
+- do not add infrastructure that the current slice does not require
 
 ## Review
 
