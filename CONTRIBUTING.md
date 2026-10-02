@@ -23,6 +23,35 @@ That separation is not mandatory. A small, well-understood change may include PR
 
 Small fixes do not need a PRD or spec. Add an ADR only when the reasoning is likely to matter later.
 
+## Work tracking
+
+Keep project tracking deliberately small.
+
+Each active PRD may contain a short `Progress` checklist with product-level milestones. This is the lightweight backlog for that product effort.
+
+Rules:
+
+- keep milestones outcome-oriented, not implementation-task-oriented
+- detailed subtasks live only in the PR that implements them
+- link a PR or spec from the milestone when it exists
+- one milestone may be completed by multiple PRs
+- do not create specs, issues, or placeholder files merely to represent future work
+- avoid duplicating the same task list in PRDs, specs, issues, and PR descriptions
+
+Example:
+
+```markdown
+## Progress
+
+- [x] Define product direction — #1
+- [ ] Run a usable workspace locally
+- [ ] Save and track opportunities
+- [ ] Use the same state from AI and UI
+- [ ] Export and restore the workspace
+```
+
+If the project later outgrows this convention, introduce more project-management structure only when there is demonstrated need.
+
 ## Atomic and incremental pull requests
 
 Every PR should be a coherent increment that can be merged on its own.
