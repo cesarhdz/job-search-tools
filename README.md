@@ -20,9 +20,11 @@ modules/
   portability/         # import/export
 
 docs/
+  roadmap.md
   architecture.md
   testing.md
   prd/
+  spec/
   adr/
 
 CONTRIBUTING.md
@@ -39,10 +41,9 @@ AI -> memory/state -> web UI
 web UI -> memory/state -> AI
 ```
 
-After dependencies are installed, the target developer experience is a single `pnpm dev` command that starts the web app, server/MCP endpoint, and local SQLite workspace.
-
 See:
 
+- [Roadmap](docs/roadmap.md)
 - [PRD 0001: First end-to-end workspace](docs/prd/0001-first-end-to-end-workspace.md)
 - [Architecture](docs/architecture.md)
 - [Testing](docs/testing.md)
