@@ -115,6 +115,16 @@ V0 is successful when the following can be demonstrated locally:
 
 We evaluate AI integration by successful behavior/tool use rather than exact generated wording.
 
+
+## Progress
+
+- [x] Define product direction and project foundation
+- [ ] Run a usable workspace locally
+- [ ] Build and enrich job-search memory progressively
+- [ ] Save and track opportunities
+- [ ] Use the same workspace state from AI and web UI
+- [ ] Export and restore the workspace
+
 ## Non-goals
 
 - job crawler or search engine
