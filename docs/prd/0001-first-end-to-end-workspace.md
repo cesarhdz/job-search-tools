@@ -1,6 +1,11 @@
-# PRD 0001: First end-to-end workspace
+---
+id: PRD-0001
+title: First end-to-end workspace
+type: prd
+status: proposed
+---
 
-Status: Proposed
+# PRD 0001: First end-to-end workspace
 
 ## Problem
 
@@ -22,7 +27,7 @@ A user should be able to start the project locally, connect an MCP-capable AI cl
 ## Primary user flow
 
 1. Start Job Search Tools locally.
-2. Complete a minimal onboarding for the current job search.
+2. Provide the minimum search context needed to begin.
 3. Connect an MCP-capable AI client to the local server.
 4. Ask the AI to read the search context.
 5. Give the AI a job posting and ask it to save the opportunity.
@@ -39,18 +44,28 @@ The AI host is responsible for search, fit analysis, writing, and other reasonin
 
 V0 supports one workspace in the UI. Domain objects still carry a workspace identifier so multiple searches can be supported later.
 
+### Minimal onboarding
+
+Onboarding should be intentionally small. V0 only needs enough information to start a useful search:
+
+- target role or roles
+- location / remote preference
+- optional must-haves or exclusions
+
+Everything else should be progressively enriched through normal use, either from the web UI or through the AI.
+
+The product should not require a user to fully model their career before they can begin.
+
 ### Memory
 
-Store the minimum structured context required to make an AI useful for a job search:
+The workspace can progressively accumulate richer context such as:
 
-- target roles
-- preferred locations / remote constraints
-- compensation preferences when provided
 - company/work preferences
-- explicit exclusions or constraints
+- compensation preferences
 - experience
 - skills
-- evidence / achievements supporting those skills
+- evidence / achievements
+- explicit constraints
 
 Memory is editable by the user and accessible to the AI through task-oriented MCP tools.
 
@@ -111,7 +126,7 @@ The MCP layer must not contain product/domain rules that are unavailable to the 
 
 V0 needs only:
 
-- onboarding / search-memory editor
+- lightweight onboarding / memory editor
 - opportunity list
 - opportunity detail
 - status update
@@ -165,7 +180,7 @@ We do not assert exact model wording. We evaluate behavior:
 V0 is successful when:
 
 1. `pnpm dev` starts the system.
-2. A profile/search context is entered in the web UI.
+2. Minimal search context is entered in the web UI.
 3. An MCP-capable AI client reads it.
 4. The AI saves a job opportunity.
 5. The opportunity appears in the UI without manual database changes.
@@ -191,7 +206,7 @@ Implement the first memory/opportunity/tracking module behavior and SQLite persi
 
 ### 3. Usable web UI
 
-Implement onboarding/memory editing, opportunity review, status and notes.
+Implement minimal onboarding/memory editing, opportunity review, status and notes.
 
 **Done when:** all V0 state can be inspected and changed without touching the database.
 
