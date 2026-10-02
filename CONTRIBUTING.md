@@ -25,33 +25,21 @@ Small fixes do not need a PRD or spec. Add an ADR only when the reasoning is lik
 
 ## Work tracking
 
-Keep project tracking deliberately small.
+Project tracking lives in `docs/roadmap.md`.
 
-Each active PRD may contain a short `Progress` checklist with product-level milestones. This is the lightweight backlog for that product effort.
+The roadmap has only three sections:
 
-Rules:
+- **Now** — work currently being pursued
+- **Next** — likely follow-up work
+- **Archive** — completed or intentionally retired work
 
-- keep milestones outcome-oriented, not implementation-task-oriented
-- detailed subtasks live only in the PR that implements them
-- one milestone may be completed by multiple PRs
-- do not annotate milestones with PR numbers, URLs, issue IDs, or implementation history
-- use Git and pull-request history for traceability
-- do not create specs, issues, or placeholder files merely to represent future work
-- avoid duplicating the same task list in PRDs, specs, issues, and PR descriptions
+Each bullet is one product task, normally backed by a PRD. Keep the roadmap terse; scope, acceptance criteria, design details, and open questions belong in the PRD/spec.
 
-Example:
+Do not maintain implementation subtasks in the roadmap. Those belong in the PR that performs the work.
 
-```markdown
-## Progress
+Use Git and pull-request history for traceability instead of adding PR numbers, issue IDs, or completion logs to roadmap entries.
 
-- [x] Define product direction
-- [ ] Run a usable workspace locally
-- [ ] Save and track opportunities
-- [ ] Use the same state from AI and UI
-- [ ] Export and restore the workspace
-```
-
-If the project later outgrows this convention, introduce more project-management structure only when there is demonstrated need.
+Do not create GitHub Issues, placeholder specs, or another backlog merely to mirror the roadmap.
 
 ## Atomic and incremental pull requests
 
@@ -81,6 +69,7 @@ Structured documentation uses YAML frontmatter so it can be indexed or rendered 
 
 Use frontmatter for:
 
+- roadmap
 - PRDs
 - specs
 - ADRs
