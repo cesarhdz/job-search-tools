@@ -9,56 +9,59 @@ status: proposed
 
 ## Problem
 
-AI assistants are already good at searching, reading job descriptions, reasoning about fit, writing, and interview preparation. They are much worse at maintaining a durable, inspectable job-search state across conversations and AI providers.
+AI assistants are already good at searching, reading job descriptions, reasoning about fit, writing, and interview preparation. They are much worse at maintaining durable, inspectable job-search state across conversations and AI providers.
 
 A user needs one structured workspace that both an AI host and a traditional UI can read and update.
 
 ## Goal
 
-Prove the core product loop locally, without cloud infrastructure:
+Prove the core product loop locally, without requiring cloud infrastructure:
 
 ```text
-AI -> memory/state -> web UI
-web UI -> memory/state -> AI
+AI -> durable workspace -> web UI
+web UI -> durable workspace -> AI
 ```
 
-A user should be able to start the project locally, connect an MCP-capable AI client, save an opportunity through the AI, see it in the web UI, update it in the UI, and have the AI read the updated state.
+A user should be able to start with a small amount of search context, work with an MCP-capable AI client, save an opportunity through the AI, see it in the web UI, update it there, and have the AI read the updated state.
+
+## Product principles
+
+- The AI host does search, reasoning, matching, writing, and coaching when it already does those jobs well.
+- Job Search Tools owns durable state, portability, and interfaces where chat is a poor fit.
+- Starting should require very little setup.
+- Memory should become richer progressively through normal use rather than through a large upfront profile.
+- The first version is local-first and must not require the hosted/cloud product.
+- The workspace is portable and not defined by its database implementation.
 
 ## Primary user flow
 
 1. Start Job Search Tools locally.
 2. Provide the minimum search context needed to begin.
-3. Connect an MCP-capable AI client to the local server.
-4. Ask the AI to read the search context.
-5. Give the AI a job posting and ask it to save the opportunity.
-6. Open the web UI and review the saved opportunity.
-7. Change its status or add a note.
-8. Ask the AI about the opportunity and receive the updated state.
+3. Connect an MCP-capable AI client.
+4. Ask the AI to use the stored search context.
+5. Ask the AI to save a job opportunity.
+6. Review that opportunity in the web UI.
+7. Update its tracking state or add context in the UI.
+8. Ask the AI about it again and receive the updated state.
 9. Export the workspace.
-
-The AI host is responsible for search, fit analysis, writing, and other reasoning. Job Search Tools is responsible for durable state and UI.
 
 ## V0 scope
 
-### Workspace
-
-V0 supports one workspace in the UI. Domain objects still carry a workspace identifier so multiple searches can be supported later.
-
 ### Minimal onboarding
 
-Onboarding should be intentionally small. V0 only needs enough information to start a useful search:
+V0 should ask only for enough information to make the first AI interaction useful:
 
 - target role or roles
 - location / remote preference
 - optional must-haves or exclusions
 
-Everything else should be progressively enriched through normal use, either from the web UI or through the AI.
+Everything else can be added progressively from normal AI/UI use.
 
-The product should not require a user to fully model their career before they can begin.
+The product should not require a user to fully model their career before beginning.
 
-### Memory
+### Progressive memory
 
-The workspace can progressively accumulate richer context such as:
+The workspace can accumulate richer context over time, including:
 
 - company/work preferences
 - compensation preferences
@@ -67,166 +70,50 @@ The workspace can progressively accumulate richer context such as:
 - evidence / achievements
 - explicit constraints
 
-Memory is editable by the user and accessible to the AI through task-oriented MCP tools.
+The exact schema and editing behavior are design concerns for the memory spec.
 
-### Opportunities
+### Opportunities and tracking
 
-An opportunity contains:
+A user can preserve job opportunities they want to review or track and maintain lightweight state/context around them.
 
-- title
-- company
-- source URL
-- saved-at timestamp
-- job-description snapshot or normalized text when available
-- status
-- notes
+The exact fields, statuses, transitions, snapshots, and commands belong in opportunity/tracking specs.
 
-Initial statuses:
+### AI access
 
-- `review`
-- `saved`
-- `applied`
-- `closed`
+An MCP-capable AI client can read relevant workspace context and perform explicit workspace actions.
 
-The status model is intentionally small. More stages are added only after real use shows they are necessary.
+The exact MCP tools and contracts belong in the spec for each product slice.
 
-### Tracking
+### Web UI
 
-V0 tracking is intentionally lightweight:
+The web UI provides focused interfaces for things that are cumbersome in conversation, initially:
 
-- status
-- notes
-- optional next action
-- timestamps
+- lightweight onboarding / memory editing
+- opportunity review
+- lightweight tracking and notes
+- portability
 
-Interview preparation, negotiation, and resume adaptation remain jobs for the AI host. The workspace only preserves the state/context they may need.
+Exact screens and interaction design belong in specs.
 
 ### Portability
 
-The user can export the full logical workspace in a versioned format and import it again.
+The user can export the logical workspace in a versioned format and import it again.
 
 The database file is not the portability contract.
 
-## MCP capabilities
+## Product-level acceptance criteria
 
-The first MCP surface should remain small:
+V0 is successful when the following can be demonstrated locally:
 
-- `get_search_context`
-- `update_search_context`
-- `save_opportunity`
-- `get_opportunity`
-- `update_opportunity_status`
-- `add_opportunity_note`
+1. A user can begin with minimal search context.
+2. An MCP-capable AI client can read that context.
+3. The AI can save an opportunity into the workspace.
+4. The saved opportunity appears in the web UI.
+5. The user can update relevant state/context in the UI.
+6. The AI subsequently observes that updated state.
+7. The workspace can be exported and restored without depending on a particular database file.
 
-Tools should return structured results and stable identifiers.
-
-The MCP layer must not contain product/domain rules that are unavailable to the web application. Both surfaces invoke the same application behavior.
-
-## Web UI
-
-V0 needs only:
-
-- lightweight onboarding / memory editor
-- opportunity list
-- opportunity detail
-- status update
-- notes
-- export/import
-
-Visual polish is secondary to proving that the AI and UI operate on exactly the same state.
-
-## Local-first developer experience
-
-After cloning and installing dependencies, the target workflow is:
-
-```bash
-pnpm dev
-```
-
-That command should:
-
-- start the web app
-- start the API/MCP server
-- create/migrate the local SQLite database when necessary
-- print the web and MCP endpoints
-
-No Docker, cloud account, PostgreSQL installation, or hosted service should be required for V0 development.
-
-A contributor should be able to connect an MCP client and exercise the product within minutes of cloning the repository.
-
-## Acceptance criteria
-
-### Deterministic
-
-- memory can be created, read, and updated
-- an opportunity can be saved and retrieved
-- status and notes persist
-- UI and MCP observe the same state
-- one workspace cannot accidentally resolve another workspace's records
-- export followed by import preserves supported state
-
-### AI interaction
-
-We do not assert exact model wording. We evaluate behavior:
-
-- the AI reads search context when needed
-- "save this job" calls the save tool with valid structured arguments
-- a read-only request does not cause an unnecessary write
-- status changes use the correct opportunity identifier
-- untrusted text inside a job description cannot itself trigger workspace mutations
-
-### End-to-end
-
-V0 is successful when:
-
-1. `pnpm dev` starts the system.
-2. Minimal search context is entered in the web UI.
-3. An MCP-capable AI client reads it.
-4. The AI saves a job opportunity.
-5. The opportunity appears in the UI without manual database changes.
-6. The user adds a note or changes status in the UI.
-7. The AI subsequently reads the updated state.
-8. The workspace can be exported.
-
-## Implementation milestones
-
-Keep this list at PR/milestone level. Detailed subtasks belong in the implementation PR that performs the work.
-
-### 1. Runnable monorepo
-
-Scaffold Next.js + NestJS and make `pnpm dev` start the empty local system.
-
-**Done when:** a fresh clone runs web + server with one command after dependency installation.
-
-### 2. Core modules + SQLite
-
-Implement the first memory/opportunity/tracking module behavior and SQLite persistence.
-
-**Done when:** V0 state survives process restarts without external infrastructure.
-
-### 3. Usable web UI
-
-Implement minimal onboarding/memory editing, opportunity review, status and notes.
-
-**Done when:** all V0 state can be inspected and changed without touching the database.
-
-### 4. MCP vertical slice
-
-Expose the initial MCP tools over the same module/application behavior.
-
-**Done when:** an MCP client reads and mutates the same workspace shown by the UI.
-
-### 5. Local AI end-to-end
-
-Connect at least one MCP-capable AI client and exercise the complete acceptance flow, including adversarial/untrusted job-description content.
-
-**Done when:** the AI/UI round trip works locally without AWS.
-
-### 6. Portability
-
-Implement the versioned export/import format and round-trip tests.
-
-**Done when:** a workspace can be moved without copying the SQLite database.
+We evaluate AI integration by successful behavior/tool use rather than exact generated wording.
 
 ## Non-goals
 
@@ -237,23 +124,26 @@ Implement the versioned export/import format and round-trip tests.
 - native resume generator
 - native interview coach
 - vector database as source of truth
-- cloud authentication
-- billing
+- cloud authentication or billing
 - multiple-workspace UI
 - mobile app
 - community features
 
 ## Privacy direction
 
-V0 is local-only by default. It should not send workspace content anywhere except to the AI host the user explicitly connects.
+V0 is local-first. It should not send workspace content anywhere except to services the user explicitly connects.
 
 Hosted encryption/authentication is a later cloud concern and must not change the logical workspace format.
 
-## Open questions for later
+## Open questions
 
-- exact hosted encryption/key model
+These are intentionally unresolved until a concrete slice needs them:
+
+- exact memory schema
+- opportunity fields and lifecycle
+- MCP tool contracts
+- local runtime details
+- import/export representation
 - multi-workspace UX
 - document/resume storage
-- richer application stages
 - synchronization between devices
-- which parts of the public knowledge base should be exposed to AI hosts
