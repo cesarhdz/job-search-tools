@@ -1,3 +1,9 @@
+---
+title: Testing
+type: guide
+status: current
+---
+
 # Testing
 
 Most of Job Search Tools is deterministic software. AI behavior stays at the edge and is evaluated separately.
@@ -68,7 +74,7 @@ The eval harness should be model/host replaceable. AI-provider-specific infrastr
 Before a meaningful release:
 
 1. run `pnpm dev`
-2. create/update search context in the UI
+2. create/update minimal search context in the UI
 3. connect an MCP-capable AI client
 4. ask it to read the context
 5. ask it to save an opportunity
