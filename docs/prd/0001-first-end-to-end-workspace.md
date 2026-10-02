@@ -119,14 +119,14 @@ We evaluate AI integration by successful behavior/tool use rather than exact gen
 
 Keep this checklist at product-milestone level. Detailed implementation tasks belong in the PR that performs the work.
 
-- [x] Define product direction and project foundation — #1
+- [x] Define product direction and project foundation
 - [ ] Run a usable workspace locally
 - [ ] Build and enrich job-search memory progressively
 - [ ] Save and track opportunities
 - [ ] Use the same workspace state from AI and web UI
 - [ ] Export and restore the workspace
 
-Milestones may be completed by one or more PRs. Link the relevant PR/spec when it exists; do not create speculative specs just to populate this list.
+Milestones may be completed by one or more PRs. Git and pull-request history provide implementation traceability, so this checklist should stay free of PR references and other bookkeeping.
 
 ## Non-goals
 
