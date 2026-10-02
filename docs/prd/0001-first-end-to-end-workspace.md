@@ -116,6 +116,10 @@ V0 is successful when the following can be demonstrated locally:
 We evaluate AI integration by successful behavior/tool use rather than exact generated wording.
 
 
+## Specs
+
+- [SPEC-0001: Local workspace runtime](../spec/0001-local-workspace-runtime.md)
+
 ## Progress
 
 - [x] Define product direction and project foundation
