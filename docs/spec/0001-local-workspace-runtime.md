@@ -2,7 +2,7 @@
 id: SPEC-0001
 title: Local workspace runtime
 type: spec
-status: proposed
+status: implemented
 prd: PRD-0001
 ---
 

@@ -8,6 +8,17 @@ status: current
 
 Most of Job Search Tools is deterministic software. AI behavior stays at the edge and is evaluated separately.
 
+## Repository checks
+
+For the current local runtime, run:
+
+```bash
+pnpm typecheck
+pnpm build
+```
+
+A runtime smoke check starts `pnpm dev`, verifies the initial workspace at `http://localhost:3000`, and verifies `GET http://localhost:3001/health` reports the local SQLite-backed runtime as healthy.
+
 ## Unit tests
 
 Use for module/domain behavior:

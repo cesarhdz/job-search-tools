@@ -129,15 +129,22 @@ Exact tool contracts belong in the spec for the slice that introduces them rathe
 
 ## Local-first runtime
 
-V0 must be easy to run locally, with no cloud dependency in the development loop.
+V0 runs locally with Node.js 24+ and pnpm, with no cloud dependency in the development loop.
 
-The target feedback loop is:
-
-```text
-edit -> local run -> AI call -> inspect UI/state
+```bash
+pnpm install
+pnpm dev
 ```
 
-The concrete local runtime and commands are specified when that slice is implemented.
+The root development command starts the Next.js web runtime on port 3000 and the NestJS server on port 3001. The server exposes `GET /health` and opens the local SQLite database under `.data/`.
+
+The current feedback loop is:
+
+```text
+edit -> local run -> inspect UI/state
+```
+
+MCP/AI interaction will extend this loop in a later slice.
 
 ## Storage
 
