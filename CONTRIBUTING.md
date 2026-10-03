@@ -13,6 +13,8 @@ Use the smallest amount of design documentation that makes the change clear and 
 
 Specs are written just in time. Do not fully specify later phases before the current slice has produced useful feedback.
 
+A spec should define an observable deliverable, not only internal scaffolding. When adding or implementing a spec, review its documentation impact explicitly: the parent PRD, current architecture, relevant ADRs, testing guidance, README/setup instructions, and any other documentation whose description would become stale. Update affected documentation in the same implementation PR. Create an ADR only when the slice introduces a durable architectural decision whose rationale should be preserved.
+
 A larger change may naturally move through separate PRs:
 
 ```text
