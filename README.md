@@ -4,6 +4,31 @@ Open-source tools for running a job search with the AI assistant you already use
 
 This project provides the durable layer around AI: structured memory, opportunities, triage, tracking, notes, portability, and focused interfaces. Search, reasoning, writing, matching, and coaching should stay with the user's AI host whenever it already does them well.
 
+## Run locally
+
+Requirements:
+
+- Node.js 24+
+- pnpm 12.8.0
+
+Start the local workspace:
+
+```bash
+pnpm install
+pnpm dev
+```
+
+The web workspace runs at `http://localhost:3000`. The local server runs at `http://localhost:3001`, with health/status available at `/health`.
+
+The server creates local SQLite data under `.data/`. No cloud account or credentials are required.
+
+Useful checks:
+
+```bash
+pnpm typecheck
+pnpm build
+```
+
 ## Repository
 
 This is a pnpm + TypeScript monorepo organized primarily by product module.
@@ -18,7 +43,6 @@ modules/
   opportunities/       # saved jobs, snapshots, triage
   tracking/            # status, notes, interactions
   portability/         # import/export
-
 docs/
   roadmap.md
   architecture.md
@@ -61,4 +85,4 @@ See:
 
 ## Status
 
-Architecture and product bootstrap. No production release yet.
+Early local workspace runtime. No production release yet.
